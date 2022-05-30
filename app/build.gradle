@@ -50,4 +50,22 @@ dependencies {
     def nav_version = "2.3.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
+    def retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+
+    def koin_version = "2.2.3"
+    // Koin main features for Android
+    implementation "io.insert-koin:koin-android:$koin_version"
+    // Koin AndroidX Scope features
+    implementation "io.insert-koin:koin-androidx-scope:$koin_version"
+    // Koin AndroidX ViewModel features
+    implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
+    // Koin AndroidX Fragment features
+    implementation "io.insert-koin:koin-androidx-fragment:$koin_version"
+    // Koin AndroidX WorkManager
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    // Koin AndroidX Experimental features
+    implementation "io.insert-koin:koin-androidx-ext:$koin_version"
 }

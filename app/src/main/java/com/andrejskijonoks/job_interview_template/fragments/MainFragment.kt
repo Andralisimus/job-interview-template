@@ -9,12 +9,15 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.andrejskijonoks.job_interview_template.databinding.FragmentMainBinding
 import com.andrejskijonoks.job_interview_template.models.TemplateData
+import com.andrejskijonoks.job_interview_template.viewModels.TemplateViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
     private var _binding : FragmentMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+    private val viewModel: TemplateViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +30,9 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getCurrencies()
+
         binding.button.setOnClickListener {
             navigateToDetails()
         }
