@@ -2,8 +2,10 @@ package com.andrejskijonoks.job_interview_template.base
 
 import android.app.Application
 import com.andrejskijonoks.job_interview_template.api.RetrofitProvider
-import com.andrejskijonoks.job_interview_template.api.TemplateRepository
-import com.andrejskijonoks.job_interview_template.viewModels.TemplateViewModel
+import com.andrejskijonoks.job_interview_template.api.OpticsPlanetRepository
+import com.andrejskijonoks.job_interview_template.viewModels.CategoriesViewModel
+import com.andrejskijonoks.job_interview_template.viewModels.CategoryViewModel
+import com.andrejskijonoks.job_interview_template.viewModels.ProductViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
@@ -35,10 +37,12 @@ class App : Application() {
     }
 
     private fun getDomainModule() = module {
-        single { TemplateRepository() }
+        single { OpticsPlanetRepository() }
     }
 
     private fun getViewModelModule() = module {
-        viewModel { TemplateViewModel(get()) }
+        viewModel { CategoriesViewModel(get()) }
+        viewModel { CategoryViewModel(get()) }
+        viewModel { ProductViewModel(get()) }
     }
 }
