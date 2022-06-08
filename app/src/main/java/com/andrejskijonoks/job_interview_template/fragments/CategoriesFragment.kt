@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.andrejskijonoks.job_interview_template.R
+import com.andrejskijonoks.job_interview_template.base.BaseFragment
 import com.andrejskijonoks.job_interview_template.databinding.FragmentCategoriesBinding
 import com.andrejskijonoks.job_interview_template.epoxy.CategoriesController
 import com.andrejskijonoks.job_interview_template.models.Category
 import com.andrejskijonoks.job_interview_template.viewModels.CategoriesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CategoriesFragment : Fragment() {
+class CategoriesFragment : BaseFragment() {
 
     private var _binding : FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
@@ -60,8 +60,10 @@ class CategoriesFragment : Fragment() {
     }
 
     private fun navigateToDetails(category: Category) {
-        val action = CategoriesFragmentDirections.actionMainFragmentToDetailsFragment(category = category)
-        navController.navigate(action)
+        if(isActionAllowed()) {
+            val action = CategoriesFragmentDirections.actionMainFragmentToDetailsFragment(category = category)
+            navController.navigate(action)
+        }
     }
 
     override fun onDestroyView() {

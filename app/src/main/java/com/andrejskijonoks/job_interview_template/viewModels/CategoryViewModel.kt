@@ -12,13 +12,45 @@ import kotlinx.coroutines.launch
 
 class CategoryViewModel(private var repository: OpticsPlanetRepository) : ViewModel() {
 
-    var data = MutableLiveData<List<Product>>()
+    var products = MutableLiveData<List<Product>>()
+    private val gridSize = 20
+    private var page = 1
+    private var total : Int = 0
+    private lateinit var identifier : String
 
-    fun getProducts(identifier: String) {
+    private fun getProducts() {
         viewModelScope.launch {
-            val response = repository.getProducts(identifier = identifier)
-            val presentationData = mapToPresentation(response)
-            data.postValue(presentationData)
+            val response = repository.getProducts(
+                identifier = identifier,
+                gridSize = gridSize,
+                page = page
+            )
+            val newProducts = response.gridProducts["elements"] ?: listOf()
+            total = response.total
+
+            val presentationData = mapToPresentation(newProducts)
+            val combinedProducts = combineProductLists(presentationData)
+
+            products.postValue(combinedProducts)
+        }
+    }
+
+    private fun combineProductLists(newProducts: List<Product>) : List<Product> {
+        return if(page != 1 && products.value != null) {
+            products.value?.plus(newProducts) ?: listOf()
+        } else newProducts
+    }
+
+    fun loadFirstPage(identifier: String? = null) {
+        identifier?.let { this.identifier = it }
+        page = 1
+        getProducts()
+    }
+
+    fun loadNextPage() {
+        if(gridSize * page < total) {
+            page++
+            getProducts()
         }
     }
 

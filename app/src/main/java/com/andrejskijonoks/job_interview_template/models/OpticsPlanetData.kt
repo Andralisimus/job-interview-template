@@ -15,6 +15,7 @@ data class Category(
 ) : Parcelable
 
 data class ProductHolder(
+    val total: Int,
     val gridProducts: Map<String, List<Product>>
 )
 

@@ -2,21 +2,21 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/categoriesFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/categoriesFragment"
         android:name="com.andrejskijonoks.job_interview_template.fragments.CategoriesFragment"
-        android:label="MainFragment">
+        android:label="CategoriesFragment">
         <action
             android:id="@+id/action_mainFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/categoryFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/detailsFragment"
+        android:id="@+id/categoryFragment"
         android:name="com.andrejskijonoks.job_interview_template.fragments.CategoryFragment"
-        android:label="DetailsFragment">
+        android:label="CategoryFragment">
         <argument
             android:name="category"
             app:argType="com.andrejskijonoks.job_interview_template.models.Category" />

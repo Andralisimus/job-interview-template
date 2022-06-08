@@ -20,9 +20,17 @@ class ActionBar : LinearLayout {
         defStyle
     )
 
-    fun init(title: String, onClicked: (() -> Unit)? = null) {
+    fun init(
+        title: String,
+        onBackClick: (() -> Unit)? = null,
+        onHomeClick: (() -> Unit)? = null
+    ) {
         binding.title.text = title
-        if (onClicked == null) binding.image.visibility = View.GONE
-        else binding.image.setOnClickListener { onClicked.invoke() }
+
+        if (onBackClick == null) binding.backImage.visibility = View.GONE
+        else binding.backImage.setOnClickListener { onBackClick.invoke() }
+
+        if (onHomeClick == null) binding.homeImage.visibility = View.GONE
+        else binding.homeImage.setOnClickListener { onHomeClick.invoke() }
     }
 }

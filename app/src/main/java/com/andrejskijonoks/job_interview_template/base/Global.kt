@@ -7,3 +7,5 @@ const val SMALL_IMAGE_PATH = "120-90-ffffff"
 const val GLIDE_FORMAT = ".jpg"
 
 const val LOADER_MODEL_ID = "LoaderModelId"
+const val MIN_PAUSE_BETWEEN_ACTIONS = 400L
+const val MIN_PAUSE_BETWEEN_PAGINATION = 1500L

@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
+import com.andrejskijonoks.job_interview_template.base.BaseFragment
 import com.andrejskijonoks.job_interview_template.databinding.FragmentCategoryBinding
-import com.andrejskijonoks.job_interview_template.epoxy.CategoriesController
 import com.andrejskijonoks.job_interview_template.epoxy.CategoryController
-import com.andrejskijonoks.job_interview_template.models.Category
 import com.andrejskijonoks.job_interview_template.models.Product
 import com.andrejskijonoks.job_interview_template.viewModels.CategoryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : BaseFragment() {
 
     private var _binding : FragmentCategoryBinding? = null
     private val binding get() = _binding!!
@@ -41,34 +40,52 @@ class CategoryFragment : Fragment() {
         observe()
         initializeActionBar()
         initializeController()
+        initializeRefreshLayout()
 
-        if(viewModel.data.value.isNullOrEmpty()) {
-            viewModel.getProducts(identifier = args.category.url)
+        if(viewModel.products.value.isNullOrEmpty()) {
+            viewModel.loadFirstPage(identifier = args.category.url)
             epoxyController.loading = true
-        } else epoxyController.data = viewModel.data.value ?: listOf()
+        } else epoxyController.data = viewModel.products.value ?: listOf()
+    }
+
+    private fun initializeRefreshLayout() {
+        binding.refreshLayout.setOnRefreshListener {
+            viewModel.loadFirstPage()
+        }
     }
 
     private fun initializeController() {
         navController = Navigation.findNavController(binding.root)
         epoxyController = CategoryController { navigateToDetails(it) }
         binding.epoxyView.setController(epoxyController)
+        binding.epoxyView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(1) && dy > 0 && isPaginationAllowed()) {
+                    viewModel.loadNextPage()
+                }
+            }
+        })
     }
 
     private fun initializeActionBar() {
-        binding.actionBar.init(title = args.category.name) {
-            requireActivity().onBackPressed()
-        }
+        binding.actionBar.init(
+            title = args.category.name,
+            onBackClick = { if(isActionAllowed()) onBackPressed() }
+        )
     }
 
     private fun observe() {
-        viewModel.data.observe(viewLifecycleOwner) {
+        viewModel.products.observe(viewLifecycleOwner) {
             epoxyController.data = it
+            binding.refreshLayout.isRefreshing = false
         }
     }
 
     private fun navigateToDetails(product: Product) {
-        val action = CategoryFragmentDirections.actionDetailsFragmentToProductFragment(product = product)
-        navController.navigate(action)
+        if(isActionAllowed()) {
+            val action = CategoryFragmentDirections.actionDetailsFragmentToProductFragment(product = product)
+            navController.navigate(action)
+        }
     }
 
     override fun onDestroyView() {

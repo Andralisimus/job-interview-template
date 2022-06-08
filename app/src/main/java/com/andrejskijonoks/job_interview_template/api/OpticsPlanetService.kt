@@ -12,10 +12,12 @@ interface OpticsPlanetService {
     @GET("api/0.2/categories")
     suspend fun getCategories(): List<Category>
 
-    @GET("iv-api/0.3/catalog/{identifier}/products")
+    @GET("iv-api/0.5/catalog/{identifier}/products")
     suspend fun getProducts(
         @Path("identifier") identifier: String,
-        @Query("_iv_include") ivInclude: String = "gridProducts"
+        @Query("_iv_include") ivInclude: String = "gridProducts",
+        @Query("_iv_gridSize") ivGridSize: Int,
+        @Query("_iv_page") ivPage: Int
     ): ProductHolder
 
     @GET("api/0.3/products/{identifier}")
